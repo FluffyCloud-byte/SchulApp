@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🍽️ Bestell-App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --accent: #10b981;
+      --bg-gradient: linear-gradient(135deg, #f0f4ff, #dce5ff);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --radius: 20px;
+      --transition: 0.3s ease-in-out;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-gradient);
+      color: #111;
+      padding: 40px 20px;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      font-size: 2.6rem;
+      font-weight: 600;
+      margin-bottom: 50px;
+      background: linear-gradient(90deg, #4f46e5, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(12px);
+      transition: var(--transition);
+      transform-origin: center;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 0.96rem;
+      color: #555;
+      margin-bottom: 14px;
+    }
+
+    .price {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.25s ease, transform 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #3730a3;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .cart-toggle {
+      position: fixed;
+      top: 40px;
+      right: 40px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .cart-toggle.bounce {
+      animation: bounce 0.4s;
+    }
+
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.2); }
+      60% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: flex-end;
+      z-index: 999;
+    }
+
+    .cart-overlay.open {
+      display: flex;
+    }
+
+    .cart {
+      width: 360px;
+      background: #fff;
+      padding: 28px;
+      box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+      height: 100%;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.4s ease;
+    }
+
+    .cart.open {
+      transform: translateX(0%);
+    }
+
+    .cart h4 {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+
+    .cart-items {
+      list-style: none;
+      padding: 0;
+    }
+
+    .cart-items li {
+      font-size: 0.95rem;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #e11d48;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .total {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #999;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🍏 Bestell-App</header>
+
+  <button class="cart-toggle" onclick="toggleCart()">🛒 Warenkorb (<span id="cart-count">0</span>)</button>
+
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()">
+    <div class="cart" id="cart" onclick="event.stopPropagation()">
+      <h4>🧾 Deine Bestellung</h4>
+      <ul class="cart-items" id="cart-items"></ul>
+      <div class="total" id="total">Gesamt: €0.00</div>
+    </div>
+  </div>
+
+  <main>
+    <section class="product-list">
+      <div class="card">
+        <img src="https://source.unsplash.com/400x300/?burger" alt="Burger">
+        <h3>Deluxe Burger</h3>
+        <p>Saftiger Burger mit Brioche-Bun, Käse & Salat.</p>
+        <div class="price">€8.99</div>
+        <button class="btn" onclick="addToCart('Deluxe Burger', 8.99)">In den Warenkorb</button>
+      </div>
+
+      <div class="card">
+        <img src="https://source.unsplash.com/400x300/?pizza" alt="Pizza">
+        <h3>Margherita Pizza</h3>
+        <p>Traditioneller Teig, Tomatensauce, Mozzarella & Basilikum.</p>
+        <div class="price">€7.49</div>
+        <button class="btn" onclick="addToCart('Margherita Pizza', 7.49)">In den Warenkorb</button>
+      </div>
+
+      <div class="card">
+        <img src="https://source.unsplash.com/400x300/?sushi" alt="Sushi">
+        <h3>Sushi Box</h3>
+        <p>12 Stück mit Lachs, Avocado und Thunfisch.</p>
+        <div class="price">€12.99</div>
+        <button class="btn" onclick="addToCart('Sushi Box', 12.99)">In den Warenkorb</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Bestell-App 🍽️ Alle Rechte vorbehalten.
+  </footer>
+
+  <script>
+    const cart = document.getElementById("cart");
+    const cartItems = document.getElementById("cart-items");
+    const cartCount = document.getElementById("cart-count");
+    const cartOverlay = document.getElementById("cartOverlay");
+    const totalDisplay = document.getElementById("total");
+    const cartToggleBtn = document.querySelector(".cart-toggle");
+
+    let items = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function toggleCart() {
+      cartOverlay.classList.toggle("open");
+      cart.classList.toggle("open");
+    }
+
+    function addToCart(name, price) {
+      const existing = items.find(item => item.name === name);
+      if (existing) {
+        existing.qty++;
+      } else {
+        items.push({ name, price, qty: 1 });
+      }
+      saveCart();
+      renderCart();
+      animateCartButton();
+    }
+
+    function removeItem(index) {
+      items.splice(index, 1);
+      saveCart();
+      renderCart();
+    }
+
+    function animateCartButton() {
+      cartToggleBtn.classList.add("bounce");
+      setTimeout(() => cartToggleBtn.classList.remove("bounce"), 400);
+    }
+
+    function renderCart() {
+      cartItems.innerHTML = "";
+      let total = 0;
+      items.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${item.qty} × ${item.name}</span>
+          <div>
+            <span>€${(item.price * item.qty).toFixed(2)}</span>
+            <button class="remove-btn" onclick="removeItem(${index})">✕</button>
+          </div>
+        `;
+        cartItems.appendChild(li);
+        total += item.price * item.qty;
+      });
+      cartCount.textContent = items.reduce((sum, i) => sum + i.qty, 0);
+      totalDisplay.textContent = `Gesamt: €${total.toFixed(2)}`;
+    }
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(items));
+    }
+
+    renderCart();
+  </script>
+
+</body>
+</html>
