@@ -26,6 +26,6 @@ Geschrieben mit Sublime Text.
 - **localStorage** (zum Speichern des Warenkorbs im Browser)
 
 ```bash
-git clone https://github.com/dein-benutzername/bestell-app.git
+git clone https://github.com/FluffyCloud-byte/SchulApp.git
 cd bestell-app
 open index.html  # oder im Browser manuell öffnen
