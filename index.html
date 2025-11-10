@@ -1,199 +1,290 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafeteria Bestell-API</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        /* Globale Styles */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #050505; /* Dunkler Hintergrund */
-            margin: 0;
-            padding: 0;
-            color: #ffffff; /* Weißer Text */
-            transition: background-color 0.3s ease;
-        }
+  <!-- ========== META & TITLE ========== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cafeteria Bestell-API</title>
 
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-            font-size: 2.5rem;
-            color: #94c120; /* Grüner Farbton */
-            font-weight: 500;
-        }
+  <!-- ========== FONTS ========== -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
 
-        h2 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            color: #ffffff; /* Weiß für den Titel */
-        }
+  <!-- ========== STYLES ========== -->
+  <style>
+    /* =========================
+       🌿 Farbvariablen & Theme
+    ========================== */
+    :root {
+      --accent: #9be64d;
+      --accent-hover: #b0ff64;
+      --text-main: #ffffff;
+      --text-dim: #cccccc;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --blur-amount: 15px;
+    }
 
-        p {
-            font-size: 1rem;
-            color: #bbbbbb; /* Heller Text */
-            text-align: center;
-        }
+    /* =========================
+       🧱 Grundlayout
+    ========================== */
+    * {
+      box-sizing: border-box;
+    }
 
-        .container {
-            background: #ffffff; /* Weißer Hintergrund */
-            border-radius: 10px;
-            padding: 25px;
-            margin: 20px auto;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 450px;
-            animation: fadeIn 0.5s ease-in-out;
-        }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at 20% 20%, #0c1a09, #030303 80%);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
 
-        /* Formularelemente */
-        input, button {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 20px;
-            border: 1px solid #dddddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            transition: border-color 0.3s ease, transform 0.3s ease;
-        }
+    /* =========================
+       🏷️ Überschriften & Text
+    ========================== */
+    h1 {
+      margin-top: 80px;
+      font-size: 2.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(155, 230, 77, 0.4);
+      text-align: center;
+    }
 
-        input:focus, button:focus {
-            outline: none;
-            border-color: #94c120; /* Grüner Fokus */
-        }
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      font-weight: 500;
+      color: var(--text-main);
+      text-align: center;
+    }
 
-        input:focus {
-            transform: scale(1.02);
-        }
+    p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      text-align: center;
+    }
 
-        button {
-            background-color: #94c120; /* Grüner Button */
-            color: white;
-            cursor: pointer;
-            border: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
 
-        button:hover {
-            background-color: #7a9c16; /* Dunklerer Grünton bei Hover */
-            transform: scale(1.05);
-        }
+    a:hover {
+      text-decoration: underline;
+    }
 
-        /* Fehlerhinweise */
-        .message {
-            font-size: 1rem;
-            color: red;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+    /* =========================
+       📦 Container (Glassmorphism)
+    ========================== */
+    .container {
+      width: 100%;
+      max-width: 420px;
+      margin: 40px auto;
+      padding: 40px 35px;
 
-        .success-message {
-            color: #94c120; /* Grüner Erfolgstext */
-        }
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(var(--blur-amount));
+      background: var(--glass-bg);
+      box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.4),
+        inset 0 0 40px rgba(255, 255, 255, 0.03);
 
-        /* Logout Button */
-        .logout-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: auto;
-            padding: 14px 20px;
-            background-color: #94c120;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+      animation: fadeInUp 0.6s ease-out;
+    }
 
-        .logout-btn:hover {
-            background-color: #7a9c16;
-            transform: scale(1.05);
-        }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        /* Auth-Formular */
-        .auth-container {
-            display: none;
-        }
+    /* =========================
+       ✏️ Formularelemente
+    ========================== */
+    input,
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      font-size: 1rem;
+      border: none;
+      outline: none;
+      transition: all 0.25s ease;
+    }
 
-        .auth-container.active {
-            display: block;
-        }
+    input {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
+    input::placeholder {
+      color: #aaa;
+    }
 
-            .container {
-                margin: 15px;
-                padding: 20px;
-            }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(155, 230, 77, 0.3);
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.02);
+    }
 
-            .logout-btn {
-                padding: 10px 14px;
-                font-size: 0.9rem;
-                top: 10px;
-                right: 10px;
-            }
+    button {
+      background: linear-gradient(135deg, var(--accent), #7dd63c);
+      color: #0a0a0a;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(155, 230, 77, 0.4);
+    }
 
-            input, button {
-                padding: 12px;
-            }
-        }
-    </style>
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(155, 230, 77, 0.6);
+      background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+    }
+
+    /* =========================
+       🔔 Statusmeldungen
+    ========================== */
+    .message {
+      font-size: 0.95rem;
+      text-align: center;
+      margin-bottom: 10px;
+      transition: 0.3s ease;
+    }
+
+    .success-message {
+      color: var(--accent);
+      text-shadow: 0 0 8px rgba(155, 230, 77, 0.4);
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      text-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
+    }
+
+    /* =========================
+       🚪 Logout-Button
+    ========================== */
+    .logout-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 18px;
+
+      background: linear-gradient(135deg, var(--accent), #7dd63c);
+      border: none;
+      border-radius: 12px;
+      color: #0a0a0a;
+      font-weight: 600;
+      cursor: pointer;
+
+      box-shadow: 0 0 20px rgba(155, 230, 77, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 0 25px rgba(155, 230, 77, 0.6);
+    }
+
+    /* =========================
+       📱 Responsives Design
+    ========================== */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.1rem;
+      }
+
+      .container {
+        margin: 25px;
+        padding: 28px;
+      }
+
+      .logout-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- =========================
+       🌐 HEADER
+  ========================== -->
+  <h1>Cafeteria Bestell-API</h1>
 
-    <h1>Cafeteria Bestell-API</h1>
+  <!-- =========================
+       🔐 LOGIN
+  ========================== -->
+  <div class="container auth-container" id="login-container">
+    <h2>Login</h2>
+    <div id="login-message" class="message"></div>
 
-    <div class="container auth-container" id="login-container">
-        <h2>Login</h2>
-        <div id="login-message" class="message"></div> <!-- Fehlernachricht für Login -->
-        <input type="email" id="login-username" placeholder="Benutzername (E-Mail)">
-        <input type="password" id="login-password" placeholder="Passwort">
-        <button onclick="loginUser()">Anmelden</button>
-        <p>Noch keinen Account? <a href="javascript:void(0)" onclick="showRegisterForm()">Hier registrieren</a></p>
-    </div>
+    <input type="email" id="login-username" placeholder="E-Mail-Adresse" />
+    <input type="password" id="login-password" placeholder="Passwort" />
+    <button onclick="loginUser()">Anmelden</button>
 
-    <div class="container auth-container" id="register-container">
-        <h2>Registrierung</h2>
-        <div id="register-message" class="message"></div> <!-- Fehlernachricht für Registrierung -->
-        <input type="email" id="reg-username" placeholder="Benutzername (E-Mail)">
-        <input type="password" id="reg-password" placeholder="Passwort (min. 8 Zeichen)">
-        <button onclick="registerUser()">Registrieren</button>
-        <p>Bereits ein Account? <a href="javascript:void(0)" onclick="showLoginForm()">Hier anmelden</a></p>
-    </div>
+    <p>Noch keinen Account?
+      <a href="javascript:void(0)" onclick="showRegisterForm()">Jetzt registrieren</a>
+    </p>
+  </div>
 
-    <div class="container" id="order-container" style="display:none;">
-        <button class="logout-btn" onclick="logoutUser()">Abmelden</button>
-        <h2>3. Bestellung erstellen</h2>
-        <input type="text" id="order-dish" value="Pizza Salami" placeholder="Gericht">
-        <input type="number" id="order-qty" value="1" min="1" placeholder="Menge">
-        <button onclick="createOrder()">Bestellung absenden</button>
-        <div id="order-notification" style="color: #94c120; font-size: 1.2rem; margin-top: 20px;"></div> <!-- Benachrichtigung -->
-    </div>
+  <!-- =========================
+       🧾 REGISTRIERUNG
+  ========================== -->
+  <div class="container auth-container" id="register-container">
+    <h2>Registrierung</h2>
+    <div id="register-message" class="message"></div>
 
-<script>
+    <input type="email" id="reg-username" placeholder="E-Mail-Adresse" />
+    <input type="password" id="reg-password" placeholder="Passwort (min. 8 Zeichen)" />
+    <button onclick="registerUser()">Registrieren</button>
+
+    <p>Schon ein Konto?
+      <a href="javascript:void(0)" onclick="showLoginForm()">Hier anmelden</a>
+    </p>
+  </div>
+
+  <!-- =========================
+       🍕 BESTELLUNG
+  ========================== -->
+  <div class="container" id="order-container" style="display:none;">
+    <button class="logout-btn" onclick="logoutUser()">Abmelden</button>
+
+    <h2>Bestellung erstellen</h2>
+    <input type="text" id="order-dish" value="Pizza Salami" placeholder="Gericht" />
+    <input type="number" id="order-qty" value="1" min="1" placeholder="Menge" />
+    <button onclick="createOrder()">Bestellung absenden</button>
+
+    <div id="order-notification" class="message success-message" style="font-size:1.1rem; margin-top:15px;"></div>
+  </div>
+
+  <!-- =========================
+       ⚙️ JAVASCRIPT
+  ========================== -->
+  <script>
+    /* ========= Konfiguration ========= */
     const API_BASE = 'http://localhost/cafeteria-api/api_handler.php';
     let accessToken = localStorage.getItem('accessToken') || null;
 
+    /* ========= DOM-Referenzen ========= */
     const loginMessage = document.getElementById('login-message');
     const registerMessage = document.getElementById('register-message');
     const loginContainer = document.getElementById('login-container');
@@ -201,115 +292,108 @@
     const orderContainer = document.getElementById('order-container');
     const orderNotification = document.getElementById('order-notification');
 
-    // --- Anzeige ändern (Login/Register) ---
+    /* ========= Seitenwechsel ========= */
     function showLoginForm() {
-        registerContainer.classList.remove('active');
-        loginContainer.classList.add('active');
-        loginMessage.textContent = ''; // Leeren bei Anzeige
+      registerContainer.classList.remove('active');
+      loginContainer.classList.add('active');
+      loginMessage.textContent = '';
     }
 
     function showRegisterForm() {
-        loginContainer.classList.remove('active');
-        registerContainer.classList.add('active');
-        registerMessage.textContent = ''; // Leeren bei Anzeige
+      loginContainer.classList.remove('active');
+      registerContainer.classList.add('active');
+      registerMessage.textContent = '';
     }
 
     function showOrderPage() {
-        loginContainer.style.display = 'none';
-        registerContainer.style.display = 'none';
-        orderContainer.style.display = 'block';
+      loginContainer.style.display = 'none';
+      registerContainer.style.display = 'none';
+      orderContainer.style.display = 'block';
     }
 
-    // --- API HANDLER ---
+    /* ========= Registrierung ========= */
     async function registerUser() {
-        const username = document.getElementById('reg-username').value;
-        const password = document.getElementById('reg-password').value;
+      const username = document.getElementById('reg-username').value;
+      const password = document.getElementById('reg-password').value;
 
-        const result = await sendRequest('register', 'POST', { username, password });
-        if (result) {
-            registerMessage.textContent = 'Registrierung erfolgreich! Bitte jetzt anmelden.';
-            registerMessage.classList.add('success-message');
-            showLoginForm(); // Nach der Registrierung zurück zum Login
-        } else {
-            registerMessage.textContent = 'Registrierung fehlgeschlagen. Bitte versuche es später erneut.';
-            registerMessage.classList.remove('success-message');
-        }
-    }
-
-    async function loginUser() {
-        const username = document.getElementById('login-username').value;
-        const password = document.getElementById('login-password').value;
-
-        const result = await sendRequest('login', 'POST', { username, password });
-        if (result && result.accessToken) {
-            accessToken = result.accessToken;
-            localStorage.setItem('accessToken', accessToken);
-            showOrderPage();
-            loginMessage.textContent = 'Login erfolgreich!';
-            loginMessage.classList.add('success-message');
-        } else {
-            loginMessage.textContent = 'Falscher Benutzername oder Passwort.';
-            loginMessage.classList.remove('success-message');
-        }
-    }
-
-    async function createOrder() {
-        if (!accessToken) {
-            alert('Fehler: Bitte zuerst anmelden (Token fehlt)!');
-            return;
-        }
-
-        const dish = document.getElementById('order-dish').value;
-        const quantity = parseInt(document.getElementById('order-qty').value, 10);
-
-        const result = await sendRequest('bestellung', 'POST', { gericht: dish, menge: quantity }, true);
-        if (result) {
-            const orderCode = result.orderCode.toString().padStart(5, '0'); // Sicherstellen, dass der Code 5-stellig ist
-            orderNotification.textContent = `Bestellung erfolgreich! Ihr Bestellcode ist: ${orderCode}`;
-        }
-    }
-
-    function logoutUser() {
-        accessToken = null;
-        localStorage.removeItem('accessToken');
-        location.reload(); // Seite neu laden nach Logout
-    }
-
-    // Utility Funktion für API Requests
-    async function sendRequest(route, method = 'GET', body = null, needsAuth = false) {
-        const url = `${API_BASE}?route=${route}`;
-        const headers = { 'Content-Type': 'application/json' };
-
-        if (needsAuth && accessToken) {
-            headers['Authorization'] = `Bearer ${accessToken}`;
-        }
-
-        const options = { method, headers, body: body ? JSON.stringify(body) : null };
-
-        try {
-            const response = await fetch(url, options);
-            const data = await response.json();
-
-            if (!response.ok) {
-                const errorMsg = `[${response.status} ${response.statusText}] API Fehler: ${data.error || 'Unbekannt'}`;
-                return null;
-            }
-
-            return data;
-
-        } catch (error) {
-            alert(`Netzwerkfehler: ${error.message}`);
-            return null;a
-        }
-    }
-
-    // Initiale Anzeige
-    if (accessToken) {
-        showOrderPage();
-    } else {
+      const result = await sendRequest('register', 'POST', { username, password });
+      if (result) {
+        registerMessage.textContent = 'Registrierung erfolgreich! Bitte jetzt anmelden.';
+        registerMessage.className = 'message success-message';
         showLoginForm();
+      } else {
+        registerMessage.textContent = 'Registrierung fehlgeschlagen. Bitte erneut versuchen.';
+        registerMessage.className = 'message error-message';
+      }
     }
-</script>
 
+    /* ========= Login ========= */
+    async function loginUser() {
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+
+      const result = await sendRequest('login', 'POST', { username, password });
+      if (result && result.accessToken) {
+        accessToken = result.accessToken;
+        localStorage.setItem('accessToken', accessToken);
+        showOrderPage();
+        loginMessage.textContent = 'Login erfolgreich!';
+        loginMessage.className = 'message success-message';
+      } else {
+        loginMessage.textContent = 'Falsche Anmeldedaten.';
+        loginMessage.className = 'message error-message';
+      }
+    }
+
+    /* ========= Bestellung ========= */
+    async function createOrder() {
+      if (!accessToken) {
+        alert('Bitte zuerst anmelden.');
+        return;
+      }
+
+      const dish = document.getElementById('order-dish').value;
+      const quantity = parseInt(document.getElementById('order-qty').value, 10);
+      const result = await sendRequest('bestellung', 'POST', { gericht: dish, menge: quantity }, true);
+
+      if (result) {
+        const orderCode = result.orderCode.toString().padStart(5, '0');
+        orderNotification.textContent = `✅ Bestellung erfolgreich! Ihr Code: ${orderCode}`;
+      }
+    }
+
+    /* ========= Logout ========= */
+    function logoutUser() {
+      accessToken = null;
+      localStorage.removeItem('accessToken');
+      location.reload();
+    }
+
+    /* ========= API Helper ========= */
+    async function sendRequest(route, method = 'GET', body = null, needsAuth = false) {
+      const url = `${API_BASE}?route=${route}`;
+      const headers = { 'Content-Type': 'application/json' };
+
+      if (needsAuth && accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+
+      const options = { method, headers, body: body ? JSON.stringify(body) : null };
+
+      try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        if (!response.ok) return null;
+        return data;
+      } catch (error) {
+        alert(`Netzwerkfehler: ${error.message}`);
+        return null;
+      }
+    }
+
+    /* ========= Initialisierung ========= */
+    if (accessToken) showOrderPage();
+    else showLoginForm();
+  </script>
 </body>
 </html>

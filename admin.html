@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cafeteria Adminbereich</title>
+
+  <!-- Schriftart -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- Stil -->
+  <style>
+    :root {
+      --accent: #9be64d;
+      --accent-hover: #b0ff64;
+      --text-main: #ffffff;
+      --text-dim: #cccccc;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --blur-amount: 15px;
+      --sidebar-width: 230px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at 20% 20%, #0c1a09, #030303 80%);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===============================
+       SIDEBAR
+    =============================== */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--blur-amount));
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+      box-shadow: inset -1px 0 10px rgba(255,255,255,0.05);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(155,230,77,0.4);
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .sidebar button {
+      width: 80%;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      padding: 12px 20px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover,
+    .sidebar button.active {
+      background: linear-gradient(135deg, var(--accent), #7dd63c);
+      color: #0a0a0a;
+      transform: scale(1.03);
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, var(--accent), #7dd63c);
+      color: #0a0a0a;
+      font-weight: 600;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 20px rgba(155,230,77,0.3);
+    }
+
+    .logout-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(155,230,77,0.6);
+    }
+
+    /* ===============================
+       MAIN CONTENT
+    =============================== */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .topbar h1 {
+      font-size: 2.2rem;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(155,230,77,0.4);
+    }
+
+    .search-box input {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: var(--text-main);
+      outline: none;
+      width: 220px;
+      transition: 0.3s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(155,230,77,0.3);
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* ===============================
+       DASHBOARD CARDS
+    =============================== */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--blur-amount));
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4),
+                  inset 0 0 20px rgba(255,255,255,0.03);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+
+    .card h3 {
+      color: var(--text-dim);
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 1.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* ===============================
+       TABLE STYLES
+    =============================== */
+    .section {
+      background: var(--glass-bg);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(var(--blur-amount));
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4),
+                  inset 0 0 30px rgba(255,255,255,0.03);
+      margin-bottom: 40px;
+    }
+
+    .section h2 {
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text-main);
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      text-align: left;
+    }
+
+    th {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--accent), #7dd63c);
+      color: #0a0a0a;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .action-btn:hover {
+      background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+      box-shadow: 0 0 15px rgba(155,230,77,0.3);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main-content { padding: 20px; }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="logo">☕ Cafeteria<br>Admin</div>
+    <button class="active">📊 Dashboard</button>
+    <button>🧾 Bestellungen</button>
+    <button>🍕 Menüverwaltung</button>
+    <button>👤 Benutzer</button>
+    <button>⚙️ Einstellungen</button>
+    <button class="logout-btn">Abmelden</button>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Admin-Dashboard</h1>
+      <div class="search-box">
+        <input type="text" placeholder="Suchen..." />
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Gesamtbestellungen</h3>
+        <p>248</p>
+      </div>
+      <div class="card">
+        <h3>Offene Bestellungen</h3>
+        <p>15</p>
+      </div>
+      <div class="card">
+        <h3>Benutzer</h3>
+        <p>92</p>
+      </div>
+      <div class="card">
+        <h3>Gerichte</h3>
+        <p>24</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Letzte Bestellungen</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Benutzer</th>
+            <th>Gericht</th>
+            <th>Menge</th>
+            <th>Status</th>
+            <th>Aktion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#1023</td>
+            <td>max@schule.de</td>
+            <td>Pizza Salami</td>
+            <td>2</td>
+            <td><span style="color: var(--accent);">Fertig</span></td>
+            <td><button class="action-btn">Löschen</button></td>
+          </tr>
+          <tr>
+            <td>#1024</td>
+            <td>lisa@schule.de</td>
+            <td>Veggie Wrap</td>
+            <td>1</td>
+            <td><span style="color: orange;">In Bearbeitung</span></td>
+            <td><button class="action-btn">Löschen</button></td>
+          </tr>
+          <tr>
+            <td>#1025</td>
+            <td>tom@schule.de</td>
+            <td>Lasagne</td>
+            <td>3</td>
+            <td><span style="color: #ff6b6b;">Storniert</span></td>
+            <td><button class="action-btn">Löschen</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>Menüverwaltung</h2>
+      <button class="action-btn" style="margin-bottom: 15px;">+ Neues Gericht hinzufügen</button>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Gericht</th>
+            <th>Preis</th>
+            <th>Verfügbar</th>
+            <th>Aktionen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Pizza Margherita</td>
+            <td>6.50 €</td>
+            <td>✅</td>
+            <td>
+              <button class="action-btn">Bearbeiten</button>
+              <button class="action-btn">Löschen</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Pasta Bolognese</td>
+            <td>7.20 €</td>
+            <td>✅</td>
+            <td>
+              <button class="action-btn">Bearbeiten</button>
+              <button class="action-btn">Löschen</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Gemüse-Curry</td>
+            <td>6.80 €</td>
+            <td>❌</td>
+            <td>
+              <button class="action-btn">Bearbeiten</button>
+              <button class="action-btn">Löschen</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
