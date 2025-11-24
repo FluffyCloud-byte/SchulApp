@@ -1,273 +1,487 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cafeteria Adminbereich</title>
+<title>Cafeteria Adminbereich – Modern</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+/* ========================================================= */
+/* ===============   MODERN THEME VARIABLES   =============== */
+/* ========================================================= */
 :root {
   --accent: #9be64d;
-  --accent-hover: #b0ff64;
+  --accent2: #b6ffa0;
+  --accent-hover: #c8ff80;
+  --danger: #ff6b6b;
+  --warning: #ffb84d;
+
   --text-main: #ffffff;
   --text-dim: #cccccc;
+
   --glass-bg: rgba(255, 255, 255, 0.08);
-  --blur-amount: 20px;
+  --glass-bg-heavy: rgba(255, 255, 255, 0.12);
+
+  --blur-amount: 30px;
   --sidebar-width: 250px;
 }
-* {box-sizing:border-box;margin:0;padding:0;}
-body {
-  font-family:'Outfit',sans-serif;
-  background: radial-gradient(circle at 20% 20%, #0c1a09, #030303 85%);
-  color:var(--text-main);
-  display:flex;
-  min-height:100vh;
-  overflow-x:hidden;
+
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
 }
+
+body {
+  background: radial-gradient(circle at 20% 20%, #0e150b, #020202 80%);
+  min-height: 100vh;
+  color: var(--text-main);
+  display: flex;
+  overflow-x: hidden;
+}
+
+/* ========================================================= */
+/* ========================= SIDEBAR ======================== */
+/* ========================================================= */
 .sidebar {
   width: var(--sidebar-width);
   background: var(--glass-bg);
   backdrop-filter: blur(var(--blur-amount));
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  position: fixed;
+  height: 100%;
+  padding-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px;
-  box-shadow: inset -1px 0 15px rgba(255,255,255,0.05);
-  position: fixed;
-  height: 100%;
-  transition:0.3s;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  box-shadow: inset -1px 0 20px rgba(255,255,255,0.05);
 }
+
 .logo {
-  font-size: 1.8rem;
-  color: var(--accent);
+  font-size: 1.9rem;
   font-weight: 700;
-  text-shadow: 0 0 15px rgba(155,230,77,0.5);
-  margin-bottom: 50px;
-  text-align: center;
+  margin-bottom: 40px;
+  color: var(--accent);
+  text-shadow: 0 0 15px rgba(155, 230, 77, 0.6);
 }
+
 .sidebar button {
   width: 85%;
-  background: transparent;
+  padding: 14px 22px;
+  margin-bottom: 12px;
   border: none;
+  border-radius: 12px;
+  background: transparent;
   color: var(--text-main);
   font-size: 1.05rem;
-  font-weight: 500;
   text-align: left;
-  padding: 14px 25px;
-  margin-bottom: 12px;
-  border-radius: 12px;
-  transition: 0.3s;
+  transition: 0.25s;
   cursor: pointer;
 }
+
 .sidebar button:hover,
 .sidebar button.active {
-  background: linear-gradient(135deg, var(--accent), #7dd63c);
-  color: #0a0a0a;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #101510;
   transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(155, 230, 77, 0.4);
 }
+
 .logout-btn {
   margin-top: auto;
-  margin-bottom: 40px;
-  background: linear-gradient(135deg, var(--accent), #7dd63c);
-  color: #0a0a0a;
-  font-weight: 700;
-  padding: 12px 25px;
-  border: none;
+  margin-bottom: 30px;
+  width: 85%;
+  padding: 12px 22px;
   border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 20px rgba(155,230,77,0.4);
+  color: #0c0f0c;
+  font-weight: 700;
+  transition: .25s;
 }
 .logout-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(155,230,77,0.7);
+  box-shadow: 0 0 25px rgba(155,230,77,0.8);
 }
+
+/* ========================================================= */
+/* ========================= CONTENT ======================== */
+/* ========================================================= */
 .main-content {
-  flex:1;
-  padding:50px;
+  flex: 1;
+  padding: 40px;
   margin-left: var(--sidebar-width);
-  transition:0.3s;
 }
+
 .topbar {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
 }
+
 .topbar h1 {
-  font-size:2.5rem;
+  font-size: 2.6rem;
   color: var(--accent);
-  text-shadow: 0 0 25px rgba(155,230,77,0.5);
+  text-shadow: 0 0 20px rgba(155,230,77,0.4);
 }
+
+/* SEARCH */
 .search-box input {
-  background: rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.15);
-  padding:12px 16px;
-  border-radius:15px;
-  color:var(--text-main);
-  outline:none;
-  width:250px;
-  transition:0.3s;
+  width: 260px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  color: var(--text-main);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: .25s;
 }
 .search-box input:focus {
+  background: var(--glass-bg-heavy);
   border-color: var(--accent);
-  box-shadow:0 0 15px rgba(155,230,77,0.3);
-  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 15px rgba(155,230,77,0.4);
 }
+
+/* ========================================================= */
+/* ===================== DASHBOARD CARDS ==================== */
+/* ========================================================= */
 .cards {
-  display:grid;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-  gap:25px;
-  margin-bottom:50px;
+  gap: 25px;
 }
+
 .card {
+  padding: 30px;
+  border-radius: 18px;
   background: var(--glass-bg);
   backdrop-filter: blur(var(--blur-amount));
-  border:1px solid rgba(255,255,255,0.15);
-  padding:30px;
-  border-radius:20px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
-  transition:0.3s;
+  border: 1px solid rgba(255,255,255,0.15);
+  text-align: center;
+  transition: 0.25s;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.35),
+              inset 0 0 25px rgba(255,255,255,0.04);
 }
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow:0 12px 30px rgba(0,0,0,0.7);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 18px 35px rgba(0,0,0,0.5);
 }
-.card h3 {color: var(--text-dim); font-weight:400;margin-bottom:15px;}
-.card p {font-size:2rem;color:var(--accent); font-weight:700;margin:0;}
+
+.card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.card h3 { color: var(--text-dim); margin-bottom: 12px; }
+.card p {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ========================================================= */
+/* ====================== TABLES + SECTIONS ================= */
+/* ========================================================= */
 .section {
   background: var(--glass-bg);
-  padding:35px;
-  border-radius:20px;
   backdrop-filter: blur(var(--blur-amount));
-  border:1px solid rgba(255,255,255,0.15);
-  box-shadow:0 10px 30px rgba(0,0,0,0.5), inset 0 0 30px rgba(255,255,255,0.03);
-  margin-bottom:50px;
+  padding: 30px;
+  margin-top: 40px;
+  border-radius: 18px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4),
+              inset 0 0 25px rgba(255,255,255,0.03);
 }
-.section h2 {color: var(--accent); font-weight:700;margin-bottom:25px;}
-table {width:100%; border-collapse:collapse;color:var(--text-main);}
-th, td {padding:14px 12px;border-bottom:1px solid rgba(255,255,255,0.15); text-align:left;}
-th {color:var(--accent); font-weight:600;}
-tr:hover {background: rgba(255,255,255,0.08);}
+
+.section h2 {
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-main);
+}
+th, td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+
 .action-btn {
-  background: linear-gradient(135deg, var(--accent), #7dd63c);
-  color:#0a0a0a;
-  border:none;
-  padding:8px 16px;
-  border-radius:10px;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
-  font-size:0.95rem;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #121512;
+  transition: .25s;
 }
 .action-btn:hover {
-  background: linear-gradient(135deg, var(--accent-hover), var(--accent));
-  box-shadow:0 0 15px rgba(155,230,77,0.3);
   transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(155,230,77,0.4);
 }
+
+/* ========================================================= */
+/* ========================== POPUP ========================= */
+/* ========================================================= */
 #popup {
-  position: fixed; top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.6); display:none; justify-content:center; align-items:center; z-index:9999;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  animation: fadeIn .3s ease-out;
 }
-#popup.show {display:flex;}
+#popup.show { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
 #popup-content-box {
-  background:#111; padding:25px; border-radius:15px; max-width:450px; width:95%;
-  box-shadow:0 5px 25px rgba(0,0,0,0.7);
+  background: var(--glass-bg-heavy);
+  padding: 30px;
+  width: 420px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(25px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  animation: slideUp .3s ease-out;
 }
-#popup-close {position:absolute; top:15px; right:25px; cursor:pointer; font-size:1.3rem;}
-@media(max-width:900px){
-  .sidebar{display:none;}
-  .main-content{margin-left:0;padding:25px;}
+@keyframes slideUp {
+  from { transform: translateY(25px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
+
+#popup-title {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: var(--accent);
+}
+
+#popup-close {
+  position: absolute;
+  margin-left: 360px;
+  margin-top: -10px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: var(--text-dim);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-main);
+  margin-bottom: 20px;
+}
+
+/* TOGGLE SWITCH */
+.switch { position: relative; width: 50px; height: 26px; display: inline-block; }
+.switch input { display: none; }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 30px;
+  transition: .3s;
+}
+.slider:before {
+  content:"";
+  position:absolute;
+  height:20px;
+  width:20px;
+  left:3px;
+  top:3px;
+  background:white;
+  border-radius:50%;
+  transition:.3s;
+}
+input:checked + .slider {
+  background: var(--accent);
+}
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
 </style>
 </head>
 <body>
 
+<!-- ======================================================== -->
+<!--                       SIDEBAR                             -->
+<!-- ======================================================== -->
 <div class="sidebar">
-  <div class="logo">☕ Cafeteria Admin</div>
+  <div class="logo">☕ Admin</div>
+
   <button onclick="showPage('dashboard')" class="active">📊 Dashboard</button>
   <button onclick="showPage('orders')">🧾 Bestellungen</button>
   <button onclick="showPage('menu')">🍕 Menüverwaltung</button>
   <button onclick="showPage('stats')">📈 Statistiken</button>
+
   <button class="logout-btn">Abmelden</button>
 </div>
 
+
+<!-- ======================================================== -->
+<!--                       MAIN CONTENT                        -->
+<!-- ======================================================== -->
 <div class="main-content">
-  <div class="topbar">
-    <h1>Admin-Dashboard</h1>
-    <div class="search-box">
-      <input type="text" placeholder="Suchen..." id="search-input"/>
-    </div>
-  </div>
 
-  <!-- Seiten -->
-  <div id="dashboard">
-    <div class="cards">
-      <div class="card"><h3>Gesamtbestellungen</h3><p id="total-orders">248</p></div>
-      <div class="card"><h3>Offene Bestellungen</h3><p id="open-orders">15</p></div>
-      <div class="card"><h3>Benutzer</h3><p id="total-users">92</p></div>
-      <div class="card"><h3>Gerichte</h3><p id="total-dishes">24</p></div>
+    <div class="topbar">
+        <h1>Admin-Dashboard</h1>
+        <div class="search-box">
+            <input id="search-input" placeholder="Suchen..." />
+        </div>
     </div>
-  </div>
 
-  <div id="orders" style="display:none;">
-    <div class="section">
-      <h2>Letzte Bestellungen</h2>
-      <table>
-        <thead>
-          <tr><th>ID</th><th>Benutzer</th><th>Gericht</th><th>Menge</th><th>Status</th><th>Aktion</th></tr>
-        </thead>
-        <tbody id="orders-table-body"></tbody>
-      </table>
-    </div>
-  </div>
+    <!-- DASHBOARD -->
+    <div id="dashboard">
+        <div class="cards">
 
-  <div id="menu" style="display:none;">
-    <div class="section">
-      <h2>Menüverwaltung</h2>
-      <button class="action-btn" onclick="addMenuItem()" style="margin-bottom:20px;">+ Neues Gericht hinzufügen</button>
-      <table>
-        <thead><tr><th>ID</th><th>Gericht</th><th>Preis</th><th>Verfügbar</th><th>Aktionen</th></tr></thead>
-        <tbody id="menu-table-body"></tbody>
-      </table>
-    </div>
-  </div>
+            <div class="card">
+                <div class="card-icon">📦</div>
+                <h3>Gesamtbestellungen</h3>
+                <p id="total-orders">0</p>
+            </div>
 
-  <div id="stats" style="display:none;">
-    <div class="section">
-      <h2>Statistiken</h2>
-      <canvas id="ordersChart" height="180"></canvas>
-      <canvas id="menuChart" height="180" style="margin-top:30px;"></canvas>
+            <div class="card">
+                <div class="card-icon">⏳</div>
+                <h3>Offene Bestellungen</h3>
+                <p id="open-orders">0</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">👤</div>
+                <h3>Benutzer</h3>
+                <p id="total-users">92</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🍽️</div>
+                <h3>Gerichte</h3>
+                <p id="total-dishes">0</p>
+            </div>
+
+        </div>
     </div>
-  </div>
+
+    <!-- BESTELLUNGEN -->
+    <div id="orders" style="display:none;">
+        <div class="section">
+            <h2>Letzte Bestellungen</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Benutzer</th>
+                        <th>Gericht</th>
+                        <th>Menge</th>
+                        <th>Status</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MENÜ -->
+    <div id="menu" style="display:none;">
+        <div class="section">
+            <h2>Menüverwaltung</h2>
+
+            <button class="action-btn" onclick="addMenuItem()" style="margin-bottom:20px;">
+                + Neues Gericht hinzufügen
+            </button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Gericht</th>
+                        <th>Preis</th>
+                        <th>Verfügbar</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody id="menu-table-body"></tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <!-- STATISTIKEN -->
+    <div id="stats" style="display:none;">
+        <div class="section">
+            <h2>Statistiken</h2>
+
+            <canvas id="ordersChart" height="180"></canvas>
+            <canvas id="menuChart" height="180" style="margin-top:35px;"></canvas>
+        </div>
+    </div>
 
 </div>
 
-<!-- Popup -->
+
+<!-- ======================================================== -->
+<!--                       POPUP WINDOWS                       -->
+<!-- ======================================================== -->
 <div id="popup">
   <div id="popup-content-box">
-    <span id="popup-close" onclick="closePopup()">✖</span>
-    <h3 id="popup-title"></h3>
-    <div id="popup-content"></div>
+      <span id="popup-close" onclick="closePopup()">✖</span>
+      <h3 id="popup-title"></h3>
+      <div id="popup-content"></div>
   </div>
 </div>
 
+
+<!-- ======================================================== -->
+<!--                       JAVASCRIPT                          -->
+<!-- ======================================================== -->
 <script>
-// ==========================
-// Seitenwechsel
-function showPage(id){
-  ['dashboard','orders','menu','stats'].forEach(p=>document.getElementById(p).style.display='none');
-  document.getElementById(id).style.display='block';
-  document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
-  document.querySelector(`.sidebar button[onclick="showPage('${id}')"]`).classList.add('active');
+
+/* ========================================== */
+/*              SEITENWECHSEL                 */
+/* ========================================== */
+function showPage(id) {
+    ["dashboard","orders","menu","stats"]
+        .forEach(p => document.getElementById(p).style.display = "none");
+
+    document.getElementById(id).style.display = "block";
+
+    document.querySelectorAll(".sidebar button")
+        .forEach(btn => btn.classList.remove("active"));
+
+    document.querySelector(`.sidebar button[onclick="showPage('${id}')"]`)
+        .classList.add("active");
 }
 
-// ==========================
-// Demo-Daten
+
+/* ========================================== */
+/*                 DEMODATEN                  */
+/* ========================================== */
+
 let orders = [
   {id:1023,user:"max@schule.de",dish:"Pizza Salami",amount:2,status:"Fertig"},
   {id:1024,user:"lisa@schule.de",dish:"Veggie Wrap",amount:1,status:"In Bearbeitung"},
@@ -276,6 +490,7 @@ let orders = [
   {id:1027,user:"peter@schule.de",dish:"Gemüse-Curry",amount:2,status:"In Bearbeitung"},
   {id:1028,user:"sophie@schule.de",dish:"Pasta Bolognese",amount:1,status:"Fertig"}
 ];
+
 let menuItems = [
   {id:1,name:"Pizza Margherita",price:"6.50 €",available:true},
   {id:2,name:"Pasta Bolognese",price:"7.20 €",available:true},
@@ -284,153 +499,281 @@ let menuItems = [
   {id:5,name:"Burger Veggie",price:"6.90 €",available:true}
 ];
 
-// ==========================
-// Render Funktionen
-function renderOrders(){
-  let tbody=document.getElementById("orders-table-body");
-  tbody.innerHTML='';
-  orders.forEach(o=>{
-    tbody.innerHTML+=`<tr>
-      <td>#${o.id}</td>
-      <td>${o.user}</td>
-      <td>${o.dish}</td>
-      <td>${o.amount}</td>
-      <td>${o.status}</td>
-      <td><button class="action-btn" onclick="deleteOrder(${o.id})">Löschen</button></td>
-    </tr>`;
-  });
+
+/* ========================================== */
+/*               DASHBOARD INFO               */
+/* ========================================== */
+function updateDashboard() {
+    document.getElementById("total-orders").textContent = orders.length;
+    document.getElementById("open-orders").textContent =
+        orders.filter(o => o.status === "In Bearbeitung").length;
+    document.getElementById("total-dishes").textContent = menuItems.length;
 }
-function renderMenu(){
-  let tbody=document.getElementById("menu-table-body");
-  tbody.innerHTML='';
-  menuItems.forEach(m=>{
-    tbody.innerHTML+=`<tr>
-      <td>${m.id}</td>
-      <td>${m.name}</td>
-      <td>${m.price}</td>
-      <td>${m.available?'✅':'❌'}</td>
-      <td>
-        <button class="action-btn" onclick="editMenu(${m.id})">Bearbeiten</button>
-        <button class="action-btn" onclick="deleteMenu(${m.id})">Löschen</button>
-      </td>
-    </tr>`;
-  });
+
+
+/* ========================================== */
+/*             RENDER: BESTELLUNGEN           */
+/* ========================================== */
+function renderOrders() {
+    const tbody = document.getElementById("orders-table-body");
+    tbody.innerHTML = "";
+
+    orders.forEach(o => {
+        tbody.innerHTML += `
+          <tr>
+              <td>#${o.id}</td>
+              <td>${o.user}</td>
+              <td>${o.dish}</td>
+              <td>${o.amount}</td>
+              <td>${o.status}</td>
+              <td>
+                <button class="action-btn" onclick="deleteOrder(${o.id})">Löschen</button>
+              </td>
+          </tr>`;
+    });
 }
+
+
+/* ========================================== */
+/*                 RENDER: MENÜ               */
+/* ========================================== */
+function renderMenu() {
+    const tbody = document.getElementById("menu-table-body");
+    tbody.innerHTML = "";
+
+    menuItems.forEach(m => {
+        tbody.innerHTML += `
+          <tr>
+              <td>${m.id}</td>
+              <td>${m.name}</td>
+              <td>${m.price}</td>
+              <td>${m.available ? "✅" : "❌"}</td>
+              <td>
+                <button class="action-btn" onclick="editMenu(${m.id})">Bearbeiten</button>
+                <button class="action-btn" onclick="deleteMenu(${m.id})">Löschen</button>
+              </td>
+          </tr>`;
+    });
+}
+
+
+/* ========================================== */
+/*                POPUP FUNKTIONEN            */
+/* ========================================== */
+function openPopup(title, contentHTML) {
+    document.getElementById("popup-title").textContent = title;
+    document.getElementById("popup-content").innerHTML = contentHTML;
+    document.getElementById("popup").classList.add("show");
+}
+
+function closePopup() {
+    document.getElementById("popup").classList.remove("show");
+}
+
+
+/* ========================================== */
+/*            BESTELLUNG LÖSCHEN              */
+/* ========================================== */
+function deleteOrder(id) {
+    openPopup("Bestellung löschen", `
+      <p>Möchtest du die Bestellung <b>#${id}</b> wirklich löschen?</p>
+      <button class="action-btn" onclick="confirmDeleteOrder(${id})">Ja, löschen</button>
+    `);
+}
+function confirmDeleteOrder(id) {
+    orders = orders.filter(o => o.id !== id);
+    renderOrders();
+    updateDashboard();
+    closePopup();
+}
+
+
+/* ========================================== */
+/*              MENÜ FUNKTIONEN               */
+/* ========================================== */
+function addMenuItem() {
+    const newId = menuItems.length ? Math.max(...menuItems.map(x => x.id)) + 1 : 1;
+
+    openPopup("Neues Gericht hinzufügen", `
+        <label>Gericht</label>
+        <input class="form-input" id="new-name">
+
+        <label>Preis (€)</label>
+        <input class="form-input" id="new-price">
+
+        <label>Verfügbar</label>
+        <label class="switch">
+            <input type="checkbox" id="new-avail">
+            <span class="slider"></span>
+        </label><br><br>
+
+        <button class="action-btn" onclick="confirmAddMenu(${newId})">Hinzufügen</button>
+    `);
+}
+
+function confirmAddMenu(id) {
+    menuItems.push({
+        id,
+        name: document.getElementById("new-name").value,
+        price: document.getElementById("new-price").value,
+        available: document.getElementById("new-avail").checked
+    });
+    renderMenu();
+    updateDashboard();
+    closePopup();
+}
+
+
+function editMenu(id) {
+    const item = menuItems.find(x => x.id === id);
+
+    openPopup("Gericht bearbeiten", `
+        <label>Name</label>
+        <input class="form-input" id="edit-name" value="${item.name}">
+
+        <label>Preis</label>
+        <input class="form-input" id="edit-price" value="${item.price}">
+
+        <label>Verfügbar</label>
+        <label class="switch">
+            <input type="checkbox" id="edit-avail" ${item.available ? "checked" : ""}>
+            <span class="slider"></span>
+        </label><br><br>
+
+        <button class="action-btn" onclick="saveMenu(${id})">Speichern</button>
+    `);
+}
+
+function saveMenu(id) {
+    const item = menuItems.find(x => x.id === id);
+
+    item.name = document.getElementById("edit-name").value;
+    item.price = document.getElementById("edit-price").value;
+    item.available = document.getElementById("edit-avail").checked;
+
+    renderMenu();
+    closePopup();
+}
+
+function deleteMenu(id) {
+    openPopup("Gericht löschen", `
+        <p>Soll das Gericht mit <b>ID ${id}</b> gelöscht werden?</p>
+        <button class="action-btn" onclick="confirmDeleteMenu(${id})">Löschen</button>
+    `);
+}
+function confirmDeleteMenu(id) {
+    menuItems = menuItems.filter(x => x.id !== id);
+    renderMenu();
+    updateDashboard();
+    closePopup();
+}
+
+
+/* ========================================== */
+/*             LIVE-SUCHE FUNKTION            */
+/* ========================================== */
+document.getElementById("search-input").addEventListener("input", function() {
+    const term = this.value.toLowerCase();
+    const filtered = orders.filter(o =>
+        o.user.toLowerCase().includes(term) ||
+        o.dish.toLowerCase().includes(term)
+    );
+    renderFilteredOrders(filtered);
+});
+
+function renderFilteredOrders(list) {
+    const tbody = document.getElementById("orders-table-body");
+    tbody.innerHTML = "";
+    list.forEach(o => {
+        tbody.innerHTML += `
+        <tr>
+            <td>#${o.id}</td>
+            <td>${o.user}</td>
+            <td>${o.dish}</td>
+            <td>${o.amount}</td>
+            <td>${o.status}</td>
+            <td><button class="action-btn" onclick="deleteOrder(${o.id})">Löschen</button></td>
+        </tr>`;
+    });
+}
+
+
+/* ========================================== */
+/*          STATISTIKEN & CHARTS              */
+/* ========================================== */
+function initCharts() {
+
+    /* Orders chart (Status) */
+    const ctx1 = document.getElementById("ordersChart").getContext("2d");
+
+    const statusCounts = {
+        "Fertig": 0,
+        "In Bearbeitung": 0,
+        "Storniert": 0
+    };
+
+    orders.forEach(o => statusCounts[o.status]++);
+
+    new Chart(ctx1, {
+        type: "bar",
+        data: {
+            labels: Object.keys(statusCounts),
+            datasets: [{
+                backgroundColor: ["#9be64d", "#ffb84d", "#ff6b6b"],
+                data: Object.values(statusCounts),
+                borderRadius: 12,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { color: "#ccc" } },
+                x: { ticks: { color: "#ccc" } }
+            }
+        }
+    });
+
+    /* Menu availability chart */
+    const ctx2 = document.getElementById("menuChart").getContext("2d");
+
+    const available = menuItems.filter(m => m.available).length;
+    const notAvailable = menuItems.length - available;
+
+    new Chart(ctx2, {
+        type: "doughnut",
+        data: {
+            labels: ["Verfügbar", "Nicht verfügbar"],
+            datasets: [{
+                backgroundColor: ["#9be64d", "#ff6b6b"],
+                data: [available, notAvailable],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            cutout: "60%",
+            plugins: {
+                legend: {
+                    labels: { color: "#ccc" }
+                }
+            }
+        }
+    });
+}
+
+
+/* ========================================== */
+/*           INIT: RENDER + CHARTS            */
+/* ========================================== */
 renderOrders();
 renderMenu();
-
-// ==========================
-// Popup Funktionen
-function openPopup(title,contentHTML){
-  document.getElementById("popup-title").textContent=title;
-  document.getElementById("popup-content").innerHTML=contentHTML;
-  document.getElementById("popup").classList.add("show");
-}
-function closePopup(){
-  document.getElementById("popup").classList.remove("show");
-}
-
-// ==========================
-// Bestellungen löschen
-function deleteOrder(id){
-  openPopup("Bestellung löschen",
-    `<p>Willst du die Bestellung <b>#${id}</b> löschen?</p>
-     <button class='action-btn' onclick='confirmDeleteOrder(${id})'>Ja</button>` 
-  );
-}
-function confirmDeleteOrder(id){
-  orders=orders.filter(o=>o.id!==id);
-  renderOrders();
-  closePopup();
-}
-
-// ==========================
-// Menü bearbeiten/löschen/hinzufügen
-function editMenu(id){
-  let item=menuItems.find(x=>x.id===id);
-  openPopup("Gericht bearbeiten",
-    `<label>Name</label><br>
-     <input id='edit-name' value='${item.name}'><br><br>
-     <label>Preis</label><br>
-     <input id='edit-price' value='${item.price}'><br><br>
-     <label>Verfügbar</label>
-     <input type='checkbox' id='edit-avail' ${item.available?'checked':''}><br><br>
-     <button class='action-btn' onclick='saveMenu(${id})'>Speichern</button>`
-  );
-}
-function saveMenu(id){
-  let item=menuItems.find(x=>x.id===id);
-  item.name=document.getElementById("edit-name").value;
-  item.price=document.getElementById("edit-price").value;
-  item.available=document.getElementById("edit-avail").checked;
-  renderMenu();
-  closePopup();
-}
-function deleteMenu(id){
-  openPopup("Gericht löschen",
-    `<p>Soll Gericht <b>ID ${id}</b> gelöscht werden?</p>
-     <button class='action-btn' onclick='confirmDeleteMenu(${id})'>Ja</button>`
-  );
-}
-function confirmDeleteMenu(id){
-  menuItems=menuItems.filter(x=>x.id!==id);
-  renderMenu();
-  closePopup();
-}
-function addMenuItem(){
-  let newId=menuItems.length?Math.max(...menuItems.map(x=>x.id))+1:1;
-  openPopup("Neues Gericht hinzufügen",
-    `<label>Name</label><br>
-     <input id='new-name'><br><br>
-     <label>Preis</label><br>
-     <input id='new-price'><br><br>
-     <label>Verfügbar</label>
-     <input type='checkbox' id='new-avail'><br><br>
-     <button class='action-btn' onclick='confirmAddMenu(${newId})'>Hinzufügen</button>`
-  );
-}
-function confirmAddMenu(id){
-  menuItems.push({
-    id:id,
-    name:document.getElementById("new-name").value,
-    price:document.getElementById("new-price").value,
-    available:document.getElementById("new-avail").checked
-  });
-  renderMenu();
-  closePopup();
-}
-
-// ==========================
-// Charts
-function initCharts(){
-  const ctx1=document.getElementById("ordersChart").getContext("2d");
-  const statusCounts = {Fertig:0, "In Bearbeitung":0, Storniert:0};
-  orders.forEach(o => statusCounts[o.status]++);
-  
-  new Chart(ctx1,{
-    type:'bar',
-    data:{
-      labels:Object.keys(statusCounts),
-      datasets:[{label:'Bestellungen',data:Object.values(statusCounts),backgroundColor:['#9be64d','orange','#ff6b6b']}]
-    },
-    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
-  });
-
-  const ctx2=document.getElementById("menuChart").getContext("2d");
-  const availableCount = menuItems.filter(m=>m.available).length;
-  const unavailableCount = menuItems.length - availableCount;
-  
-  new Chart(ctx2,{
-    type:'pie',
-    data:{
-      labels:['Verfügbar','Nicht verfügbar'],
-      datasets:[{label:'Gerichte',data:[availableCount, unavailableCount],backgroundColor:['#9be64d','#ff6b6b']}]
-    },
-    options:{responsive:true}
-  });
-}
+updateDashboard();
 initCharts();
 
 </script>
+
 </body>
 </html>
